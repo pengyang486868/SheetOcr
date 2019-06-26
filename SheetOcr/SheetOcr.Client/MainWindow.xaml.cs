@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Serialization.Json;
 
@@ -108,13 +109,26 @@ namespace SheetOcr.Client
             //request.AddParameter("stroke", _strokeNumber);
             //request.AddParameter("path", _imgPath);
 
-            var splitNumbers = new List<int>();
-            for (var i = 0; i < 14; i++)
-                splitNumbers.Add(2);
-            splitNumbers[6] = 3;
-            splitNumbers[7] = 3;
-            splitNumbers[13] = 4;
-            
+            var splitNumbers = new List<string>();
+            //for (var i = 0; i < 14; i++)
+            //    splitNumbers.Add(2);
+            //splitNumbers[6] = 3;
+            //splitNumbers[7] = 3;
+            //splitNumbers[12] = 3;
+            //splitNumbers[13] = 4;
+
+            FormatConfig fconfig;
+            using (var text = System.IO.File.OpenText("formats.json"))
+            {
+                fconfig = JsonConvert.DeserializeObject<FormatConfig>(text.ReadToEnd());
+            }
+
+            var fdic = fconfig.AssignDic;
+            for (var i = 0; i < _rowsNumber; i++)
+            {
+                splitNumbers.Add(fdic.ContainsKey(i) ? fdic[i] : fconfig.Default);
+            }
+
             request.AddJsonBody(new
             {
                 w1 = arr[0],
@@ -130,7 +144,6 @@ namespace SheetOcr.Client
                 stroke = _strokeNumber,
                 path = _imgPath,
                 snumber = splitNumbers,
-                
             });
 
             //request.AddParameter("snumbers", splitNumbers);

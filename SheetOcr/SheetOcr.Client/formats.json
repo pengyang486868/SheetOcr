@@ -1,0 +1,21 @@
+{
+  "default": "2",
+  "assigned": [
+    {
+      "row": 6,
+      "format": "3"
+    },
+    {
+      "row": 7,
+      "format": "3"
+    },
+    {
+      "row": 12,
+      "format": "1.2"
+    },
+    {
+      "row": 13,
+      "format": "1.3"
+    }
+  ]
+}
